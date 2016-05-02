@@ -20,7 +20,11 @@ android {
 }
 
 dependencies {
-    compile fileTree(dir: 'libs', include: ['*.jar'])
+    compile fileTree(include: ['*.jar'], dir: 'libs')
     testCompile 'junit:junit:4.12'
     compile 'com.android.support:appcompat-v7:23.1.1'
+    compile files('libs/AndroidEasingFunctions-1.0.0.jar')
+    compile files('libs/AndroidViewAnimations-1.1.3.jar')
+    compile files('libs/NineOldAndroid-2.4.0.jar')
+    compile files('libs/LeonidsLib.jar')
 }
