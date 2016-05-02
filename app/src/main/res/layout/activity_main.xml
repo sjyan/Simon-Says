@@ -20,6 +20,25 @@
         style="?android:attr/progressBarStyleHorizontal"
         android:layout_centerHorizontal="true"
         android:max="100"
-        android:progress="65" />
+        android:progress="0" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceLarge"
+        android:text="Shake it!"
+        android:id="@+id/textView"
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceLarge"
+        android:text="0%"
+        android:id="@+id/percent"
+        android:layout_marginBottom="86dp"
+        android:layout_alignBottom="@+id/progressBar"
+        android:layout_centerHorizontal="true" />
 
 </RelativeLayout>
