@@ -38,4 +38,15 @@
         android:layout_below="@+id/typeGamePromptTextAnimation"
         android:layout_centerHorizontal="true"
         android:hint="Type it!" />
+
+    <Button
+        style="?android:attr/buttonStyleSmall"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Shake"
+        android:id="@+id/shakeButton"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:onClick="toShake"/>
 </RelativeLayout>

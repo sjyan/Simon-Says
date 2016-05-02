@@ -1,3 +1,18 @@
 <resources>
     <string name="app_name">SimonSays</string>
+        <string name="question1">
+        Who\'s going to be our next president?
+    </string>
+    <string name="q1a1">
+        Definitely Trump.
+    </string>
+    <string name="q1a2">
+        Trump 2016!
+    </string>
+    <string name="q1a3">
+        Make America Great Again!
+    </string>
+    <string name="q1a4">
+        Donald Trump.
+    </string>
 </resources>

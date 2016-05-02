@@ -1,6 +1,7 @@
 package edu.unc.sjyan.simonsays;
 
 import android.content.Context;
+import android.content.Intent;
 import android.hardware.Sensor;
 import android.hardware.SensorEvent;
 import android.hardware.SensorEventListener;
@@ -8,6 +9,8 @@ import android.hardware.SensorManager;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.View;
+import android.widget.Button;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
@@ -63,6 +66,16 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
 
     @Override
     public void onAccuracyChanged(Sensor sensor, int accuracy) {
+
+    }
+
+    public void onClick(View v) {
+        Button button = (Button)findViewById(R.id.launchTrivia);
+        if(button.getId()==R.id.launchTrivia) {
+            Intent intent = new Intent(this, TriviaActivity.class);
+            Log.v("TEST BUTTON", "BUTTON WORKS");
+            startActivity(intent);
+        }
 
     }
 }

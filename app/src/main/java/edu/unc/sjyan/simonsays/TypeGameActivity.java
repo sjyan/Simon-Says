@@ -1,12 +1,14 @@
 package edu.unc.sjyan.simonsays;
 
 import android.app.Activity;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
 import android.view.View;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 
@@ -82,5 +84,14 @@ public class TypeGameActivity extends AppCompatActivity {
             }
         }
         return charsCorrect > 0 ? charsCorrect / randomString.length() : 0;
+    }
+
+    public void toShake(View v) {
+        Button button = (Button)findViewById(R.id.shakeButton);
+        if(button.getId()==R.id.shakeButton) {
+            Intent intent = new Intent(this, MainActivity.class);
+            Log.v("TEST BUTTON", "BUTTON WORKS");
+            startActivity(intent);
+        }
     }
 }
