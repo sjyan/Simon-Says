@@ -6,7 +6,7 @@ android {
 
     defaultConfig {
         applicationId "edu.unc.sjyan.simonsays"
-        minSdkVersion 15
+        minSdkVersion 16
         targetSdkVersion 23
         versionCode 1
         versionName "1.0"
@@ -28,3 +28,4 @@ dependencies {
     compile files('libs/NineOldAndroid-2.4.0.jar')
     compile files('libs/LeonidsLib.jar')
 }
+

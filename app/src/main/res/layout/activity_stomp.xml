@@ -1,0 +1,151 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/stomp_layout"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:paddingLeft="@dimen/activity_horizontal_margin"
+    android:paddingRight="@dimen/activity_horizontal_margin"
+    android:paddingTop="@dimen/activity_vertical_margin"
+    android:paddingBottom="@dimen/activity_vertical_margin"
+    tools:context="edu.unc.sjyan.simonsays.MainActivity">
+
+    <ImageButton
+        android:id="@+id/bug1"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:background="@null"
+        android:src="@drawable/bug"
+        android:scaleType="fitXY"
+        android:layout_marginLeft="50dp"
+        android:layout_marginRight="50dp"
+        android:layout_marginBottom="50dp"
+        android:onClick="onClick"
+        android:visibility="invisible"
+        android:layout_centerHorizontal="true" />
+
+    <ImageButton
+        android:id="@+id/bug2"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:layout_toLeftOf="@+id/bug1"
+        android:background="@null"
+        android:src="@drawable/bug"
+        android:scaleType="fitXY"
+        android:layout_marginBottom="50dp"
+        android:onClick="onClick"
+        android:visibility="invisible" />
+
+    <ImageButton
+        android:id="@+id/bug3"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:layout_toRightOf="@+id/bug1"
+        android:background="@null"
+        android:src="@drawable/bug"
+        android:scaleType="fitXY"
+        android:layout_marginBottom="50dp"
+        android:onClick="onClick"
+        android:visibility="invisible" />
+
+    <ImageButton
+        android:id="@+id/bug4"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:background="@null"
+        android:src="@drawable/bug"
+        android:scaleType="fitXY"
+        android:layout_marginLeft="50dp"
+        android:layout_marginRight="50dp"
+        android:layout_marginBottom="50dp"
+        android:onClick="onClick"
+        android:visibility="invisible"
+        android:layout_below="@+id/bug1"
+        android:layout_centerHorizontal="true" />
+
+    <ImageButton
+        android:id="@+id/bug5"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:background="@null"
+        android:src="@drawable/bug"
+        android:scaleType="fitXY"
+        android:layout_marginBottom="50dp"
+        android:onClick="onClick"
+        android:visibility="invisible"
+        android:layout_toLeftOf="@+id/bug4"
+        android:layout_below="@+id/bug2" />
+
+    <ImageButton
+        android:id="@+id/bug6"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:background="@null"
+        android:src="@drawable/bug"
+        android:scaleType="fitXY"
+        android:layout_marginBottom="50dp"
+        android:onClick="onClick"
+        android:visibility="invisible"
+        android:layout_toRightOf="@+id/bug4"
+        android:layout_below="@+id/bug3" />
+
+    <ImageButton
+        android:id="@+id/bug7"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:background="@null"
+        android:src="@drawable/bug"
+        android:scaleType="fitXY"
+        android:layout_marginLeft="50dp"
+        android:layout_marginRight="50dp"
+        android:onClick="onClick"
+        android:visibility="invisible"
+        android:layout_below="@+id/bug4"
+        android:layout_centerHorizontal="true"/>
+
+    <ImageButton
+        android:id="@+id/bug8"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:background="@null"
+        android:src="@drawable/bug"
+        android:scaleType="fitXY"
+        android:onClick="onClick"
+        android:visibility="invisible"
+        android:layout_toLeftOf="@+id/bug7"
+        android:layout_below="@+id/bug5" />
+
+    <ImageButton
+        android:id="@+id/bug9"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:background="@null"
+        android:src="@drawable/bug"
+        android:scaleType="fitXY"
+        android:onClick="onClick"
+        android:visibility="invisible"
+        android:layout_toRightOf="@+id/bug7"
+        android:layout_below="@+id/bug6" />
+
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceLarge"
+        android:text="Stomp em!"
+        android:id="@+id/textView2"
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="0/10"
+        android:id="@+id/stomp_score"
+        android:textSize="50dp"
+        android:layout_above="@+id/textView2"
+        android:layout_centerHorizontal="true"
+        android:layout_marginBottom="108dp" />
+
+</RelativeLayout>
