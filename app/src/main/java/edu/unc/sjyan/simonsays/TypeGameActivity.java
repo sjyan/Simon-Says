@@ -11,30 +11,109 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.daimajia.androidanimations.library.Techniques;
 import com.daimajia.androidanimations.library.YoYo;
 import com.plattysoft.leonids.ParticleSystem;
+
+import java.util.ArrayList;
+import java.util.Timer;
+import java.util.TimerTask;
 
 /**
  * Created by brianluong on 5/2/16.
  */
 public class TypeGameActivity extends AppCompatActivity {
 
+    boolean firstActivity;
+    ArrayList<String> doneActivities;
+    Class nextActivity;
+    int seconds;
+    TextView time;
+    Timer t;
     protected static String randomString = "";
     protected static String currentString = "";
 
     protected void onCreate(Bundle savedInstanceState){
         super.onCreate(savedInstanceState);
         setContentView(R.layout.type_game);
+
+        doneActivities = getIntent().getStringArrayListExtra("done");
+        for(String s : doneActivities) {
+            Log.v("done activities", s);
+        }
+        seconds = getIntent().getExtras().getInt("time");
+        time = (TextView) findViewById(R.id.time);
+        t = new Timer();
+        manageTime();
+
         TextView titleTextView = (TextView) findViewById(R.id.typeGameTitleText);
         EditText answerEditText = (EditText) findViewById(R.id.typeGameEditText);
-        TypeGameAnimation promptTextViewAnimation = (TypeGameAnimation) findViewById(R.id.typeGamePromptTextAnimation);
+        TypeGameAnimation promptTextViewAnimation =
+                (TypeGameAnimation) findViewById(R.id.typeGamePromptTextAnimation);
 
         YoYo.with(Techniques.Bounce).playOn(titleTextView);
         randomString = generateRandomString();
         promptTextViewAnimation.invalidate();
         answerEditText.addTextChangedListener(watcher);
+    }
+
+    public void manageTime() {
+        t.scheduleAtFixedRate(new TimerTask() {
+            @Override
+            public void run() {
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        time.setText(seconds + "");
+                        seconds++;
+                    }
+                });
+            }
+        }, 1000, 1000);
+    }
+
+    public void decideNext() {
+        int which = (int) Math.floor(Math.random() * 4) + 1;
+        switch(which) {
+            case 1:
+                nextActivity = StompActivity.class;
+                break;
+            case 2:
+                nextActivity = ShakeActivity.class;
+                break;
+            case 3:
+                nextActivity = TriviaActivity.class;
+                break;
+            case 4:
+                nextActivity = TypeGameActivity.class;
+                break;
+        }
+
+        if(doneActivities.size() == 0) {
+            doneActivities.add(this.getClass().toString());
+            firstActivity = true;
+        } else {
+            for (String s : doneActivities) {
+                Log.v("Comparing", s + " vs. " + nextActivity.toString());
+                if (nextActivity.toString().equals(s)) {
+                    Log.v("Done already", s);
+                    decideNext();
+                } else {
+                    Log.v("Decided activity", nextActivity.toString());
+                    return;
+                }
+            }
+        }
+    }
+
+    public void handleIntent() {
+        Intent intent = new Intent(this, nextActivity);
+        if(!firstActivity) doneActivities.add(this.getClass().toString());
+        intent.putStringArrayListExtra("done", doneActivities);
+        intent.putExtra("time", seconds);
+        startActivity(intent);
     }
 
     private String generateRandomString() {
@@ -59,9 +138,18 @@ public class TypeGameActivity extends AppCompatActivity {
         @Override
         public void onTextChanged(CharSequence s, int start, int before, int count) {
             currentString = s.toString();
-            TypeGameAnimation promptTextViewAnimation = (TypeGameAnimation) findViewById(R.id.typeGamePromptTextAnimation);
+            TypeGameAnimation promptTextViewAnimation =
+                    (TypeGameAnimation) findViewById(R.id.typeGamePromptTextAnimation);
             promptTextViewAnimation.invalidate();
             if (currentString.equals(randomString)) {
+                if(doneActivities.size() >= 4) {
+                    Intent intent = new Intent(getApplicationContext(), FinalActivity.class);
+                    intent.putExtra("time", seconds);
+                    startActivity(intent);
+                } else {
+                    decideNext();
+                    handleIntent();
+                }
                 new ParticleSystem(getThis(), 50, R.drawable.confetti , 1000)
                         .setSpeedRange(0.2f, 0.5f)
                         .oneShot(findViewById(R.id.typeGamePromptTextAnimation), 400);
@@ -84,14 +172,5 @@ public class TypeGameActivity extends AppCompatActivity {
             }
         }
         return charsCorrect > 0 ? charsCorrect / randomString.length() : 0;
-    }
-
-    public void toShake(View v) {
-        Button button = (Button)findViewById(R.id.shakeButton);
-        if(button.getId()==R.id.shakeButton) {
-            Intent intent = new Intent(this, MainActivity.class);
-            Log.v("TEST BUTTON", "BUTTON WORKS");
-            startActivity(intent);
-        }
     }
 }

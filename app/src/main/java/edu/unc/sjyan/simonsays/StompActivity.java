@@ -3,7 +3,9 @@ package edu.unc.sjyan.simonsays;
 import android.animation.ArgbEvaluator;
 import android.animation.ObjectAnimator;
 import android.annotation.TargetApi;
+import android.app.Activity;
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.ColorFilter;
 import android.graphics.PorterDuff;
@@ -23,9 +25,20 @@ import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+import android.widget.Toast;
+
+import java.util.ArrayList;
+import java.util.Timer;
+import java.util.TimerTask;
 
 public class StompActivity extends AppCompatActivity {
 
+    boolean firstActivity;
+    ArrayList<String> doneActivities;
+    Class nextActivity;
+    int seconds;
+    TextView time;
+    Timer t;
     Thread playThread;
     Handler fadeHandler;
     boolean playing;
@@ -42,6 +55,12 @@ public class StompActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_stomp);
 
+        doneActivities = getIntent().getStringArrayListExtra("done");
+        seconds = getIntent().getExtras().getInt("time");
+        time = (TextView) findViewById(R.id.time);
+        t = new Timer();
+        manageTime();
+
         l = (RelativeLayout) findViewById(R.id.stomp_layout);
         v = (Vibrator) getSystemService(Context.VIBRATOR_SERVICE);
         score = (TextView) findViewById(R.id.stomp_score);
@@ -54,6 +73,63 @@ public class StompActivity extends AppCompatActivity {
         bgFadeOut.setDuration(250);
         randomAppear();
         playThread.start();
+    }
+
+    public void manageTime() {
+        t.scheduleAtFixedRate(new TimerTask() {
+            @Override
+            public void run() {
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        time.setText(seconds + "");
+                        seconds++;
+                    }
+                });
+            }
+        }, 1000, 1000);
+    }
+
+    public void decideNext() {
+        int which = (int) Math.floor(Math.random() * 4) + 1;
+        switch(which) {
+            case 1:
+                nextActivity = StompActivity.class;
+                break;
+            case 2:
+                nextActivity = ShakeActivity.class;
+                break;
+            case 3:
+                nextActivity = TriviaActivity.class;
+                break;
+            case 4:
+                nextActivity = TypeGameActivity.class;
+                break;
+        }
+
+        if(doneActivities.size() == 0) {
+            doneActivities.add(this.getClass().toString());
+            firstActivity = true;
+        } else {
+            for (String s : doneActivities) {
+                Log.v("Comparing", s + " vs. " + nextActivity.toString());
+                if (nextActivity.toString().equals(s)) {
+                    Log.v("Done already", s);
+                    decideNext();
+                } else {
+                    Log.v("Decided activity", nextActivity.toString());
+                    return;
+                }
+            }
+        }
+    }
+
+    public void handleIntent() {
+        Intent intent = new Intent(this, nextActivity);
+        if(!firstActivity) doneActivities.add(this.getClass().toString());
+        intent.putStringArrayListExtra("done", doneActivities);
+        intent.putExtra("time", seconds);
+        startActivity(intent);
     }
 
     public void randomAppear() {
@@ -150,6 +226,18 @@ public class StompActivity extends AppCompatActivity {
             score.setText(stomped + "/10");
             this.v.vibrate(100);
             v.setVisibility(View.INVISIBLE);
+
+            if(stomped >= 10) {
+                playing = false;
+                if(doneActivities.size() >= 4) {
+                    Intent intent = new Intent(this, FinalActivity.class);
+                    intent.putExtra("time", seconds);
+                    startActivity(intent);
+                } else {
+                    decideNext();
+                    handleIntent();
+                }
+            }
         }
     }
 
