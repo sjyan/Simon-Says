@@ -17,7 +17,7 @@ import java.util.TimerTask;
 public class TriviaActivity extends AppCompatActivity {
 
     boolean firstActivity;
-    ArrayList<String> doneActivities;
+    ArrayList<Integer> doneActivities;
     Class nextActivity;
     int seconds;
     TextView time;
@@ -33,10 +33,7 @@ public class TriviaActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_trivia);
 
-        doneActivities = getIntent().getStringArrayListExtra("done");
-        for(String s : doneActivities) {
-            Log.v("done activities", s);
-        }
+        doneActivities = getIntent().getIntegerArrayListExtra("done");
         seconds = getIntent().getExtras().getInt("time");
         time = (TextView) findViewById(R.id.time);
         t = new Timer();
@@ -65,9 +62,8 @@ public class TriviaActivity extends AppCompatActivity {
         }, 1000, 1000);
     }
 
-    public void decideNext() {
-        int which = (int) Math.floor(Math.random() * 4) + 1;
-        switch(which) {
+    public void decideNext(int which) {
+        switch (which) {
             case 1:
                 nextActivity = StompActivity.class;
                 break;
@@ -81,28 +77,15 @@ public class TriviaActivity extends AppCompatActivity {
                 nextActivity = TypeGameActivity.class;
                 break;
         }
-
-        if(doneActivities.size() == 0) {
-            doneActivities.add(this.getClass().toString());
-            firstActivity = true;
-        } else {
-            for (String s : doneActivities) {
-                Log.v("Comparing", s + " vs. " + nextActivity.toString());
-                if (nextActivity.toString().equals(s)) {
-                    Log.v("Done already", s);
-                    decideNext();
-                } else {
-                    Log.v("Decided activity", nextActivity.toString());
-                    return;
-                }
-            }
-        }
     }
+
 
     public void handleIntent() {
         Intent intent = new Intent(this, nextActivity);
-        if(!firstActivity) doneActivities.add(this.getClass().toString());
-        intent.putStringArrayListExtra("done", doneActivities);
+        Log.v("This activity is", this.getClass().toString());
+        Log.v("Next activity is", nextActivity.toString());
+        doneActivities.remove(0);
+        intent.putIntegerArrayListExtra("done", doneActivities);
         intent.putExtra("time", seconds);
         startActivity(intent);
     }
@@ -153,12 +136,12 @@ public class TriviaActivity extends AppCompatActivity {
                     break;
                 case (R.id.rb4):
                     timeOutEnd = System.currentTimeMillis();
-                    if(doneActivities.size() >= 4) {
+                    if(doneActivities.isEmpty()) {
                         Intent intent = new Intent(this, FinalActivity.class);
                         intent.putExtra("time", seconds);
                         startActivity(intent);
                     } else {
-                        decideNext();
+                        decideNext(doneActivities.get(0));
                         handleIntent();
                     }
                     break;
@@ -183,12 +166,12 @@ public class TriviaActivity extends AppCompatActivity {
                         break;
                     case (R.id.rb4):
                         timeOutEnd = System.nanoTime();
-                        if(doneActivities.size() >= 4) {
+                        if(doneActivities.isEmpty()) {
                             Intent intent = new Intent(this, FinalActivity.class);
                             intent.putExtra("time", seconds);
                             startActivity(intent);
                         } else {
-                            decideNext();
+                            decideNext(doneActivities.get(0));
                             handleIntent();
                         }
                         break;

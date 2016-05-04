@@ -27,7 +27,7 @@ import java.util.TimerTask;
 public class TypeGameActivity extends AppCompatActivity {
 
     boolean firstActivity;
-    ArrayList<String> doneActivities;
+    ArrayList<Integer> doneActivities;
     Class nextActivity;
     int seconds;
     TextView time;
@@ -39,10 +39,10 @@ public class TypeGameActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.type_game);
 
-        doneActivities = getIntent().getStringArrayListExtra("done");
-        for(String s : doneActivities) {
-            Log.v("done activities", s);
-        }
+        Log.v(this.getClass().toString(), "size: " + doneActivities + ", isEmpty; "
+                + doneActivities.isEmpty());
+
+        doneActivities = getIntent().getIntegerArrayListExtra("done");
         seconds = getIntent().getExtras().getInt("time");
         time = (TextView) findViewById(R.id.time);
         t = new Timer();
@@ -74,9 +74,8 @@ public class TypeGameActivity extends AppCompatActivity {
         }, 1000, 1000);
     }
 
-    public void decideNext() {
-        int which = (int) Math.floor(Math.random() * 4) + 1;
-        switch(which) {
+    public void decideNext(int which) {
+        switch (which) {
             case 1:
                 nextActivity = StompActivity.class;
                 break;
@@ -90,28 +89,13 @@ public class TypeGameActivity extends AppCompatActivity {
                 nextActivity = TypeGameActivity.class;
                 break;
         }
-
-        if(doneActivities.size() == 0) {
-            doneActivities.add(this.getClass().toString());
-            firstActivity = true;
-        } else {
-            for (String s : doneActivities) {
-                Log.v("Comparing", s + " vs. " + nextActivity.toString());
-                if (nextActivity.toString().equals(s)) {
-                    Log.v("Done already", s);
-                    decideNext();
-                } else {
-                    Log.v("Decided activity", nextActivity.toString());
-                    return;
-                }
-            }
-        }
     }
 
     public void handleIntent() {
         Intent intent = new Intent(this, nextActivity);
-        if(!firstActivity) doneActivities.add(this.getClass().toString());
-        intent.putStringArrayListExtra("done", doneActivities);
+        Log.v("This activity is", this.getClass().toString());
+        Log.v("Next activity is", nextActivity.toString());
+        intent.putIntegerArrayListExtra("done", doneActivities);
         intent.putExtra("time", seconds);
         startActivity(intent);
     }
@@ -142,12 +126,12 @@ public class TypeGameActivity extends AppCompatActivity {
                     (TypeGameAnimation) findViewById(R.id.typeGamePromptTextAnimation);
             promptTextViewAnimation.invalidate();
             if (currentString.equals(randomString)) {
-                if(doneActivities.size() >= 4) {
+                if(doneActivities.isEmpty()) {
                     Intent intent = new Intent(getApplicationContext(), FinalActivity.class);
                     intent.putExtra("time", seconds);
                     startActivity(intent);
                 } else {
-                    decideNext();
+                    decideNext(doneActivities.get(0));
                     handleIntent();
                 }
                 new ParticleSystem(getThis(), 50, R.drawable.confetti , 1000)

@@ -13,7 +13,8 @@ import java.util.ArrayList;
 public class StartActivity extends AppCompatActivity {
 
     Class nextActivity;
-    ArrayList<String> doneActivities;
+    ArrayList<Integer> doneActivities;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -21,10 +22,12 @@ public class StartActivity extends AppCompatActivity {
         setContentView(R.layout.activity_start);
 
         doneActivities = new ArrayList<>();
+        for(int i = 1; i <= 4; i++) {
+            doneActivities.add(i);
+        }
     }
 
-    public void decideNext() {
-        int which = (int) Math.floor(Math.random() * 4) + 1;
+    public void decideNext(int which) {
         switch(which) {
             case 1:
                 nextActivity = StompActivity.class;
@@ -49,21 +52,23 @@ public class StartActivity extends AppCompatActivity {
         int seconds = 0;
         Log.v("This activity is", this.getClass().toString());
         Log.v("Next activity is", nextActivity.toString());
-        intent.putStringArrayListExtra("done", doneActivities);
+        doneActivities.remove(0);
+        intent.putIntegerArrayListExtra("done", doneActivities);
         intent.putExtra("time", seconds);
         startActivity(intent);
     }
 
     // Generate random permutation for activity sequence instead of
     // check off list every loaded activity
-    public void generateSequence() {
-        
+    public void shuffleOrder(ArrayList<Integer> a) {
+        java.util.Collections.shuffle(a);
     }
 
     public void onClick(View v) {
         switch(v.getId()) {
             case R.id.play:
-                decideNext();
+                shuffleOrder(doneActivities);
+                decideNext(doneActivities.get(0));
                 handleIntent();
                 break;
             case R.id.help:
