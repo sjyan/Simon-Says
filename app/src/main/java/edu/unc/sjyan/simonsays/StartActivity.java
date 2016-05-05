@@ -3,6 +3,7 @@ package edu.unc.sjyan.simonsays;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.media.MediaPlayer;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
@@ -17,6 +18,10 @@ public class StartActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_start);
         getSupportActionBar().hide();
+
+        MediaPlayer mp = MediaPlayer.create(StartActivity.this, R.raw.bgmusic);
+        mp.setLooping(true);
+        mp.start();
 
     }
 

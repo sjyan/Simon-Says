@@ -18,4 +18,34 @@
     <string name="facebook_app_id">
         220665398313681
     </string>
+        <string name="question2">
+        What is 2 + 2 * 2?
+    </string>
+    <string name="q2a1">
+        8
+    </string>
+    <string name="q2a2">
+        2
+    </string>
+    <string name="q2a3">
+        4
+    </string>
+    <string name="q2a4">
+        6
+    </string>
+    <string name="question3">
+        Are you going to win?
+    </string>
+    <string name="q3a1">
+        Probably
+    </string>
+    <string name="q3a2">
+        Maybe
+    </string>
+    <string name="q3a3">
+        No
+    </string>
+    <string name="q3a4">
+        Yes
+    </string>
 </resources>
