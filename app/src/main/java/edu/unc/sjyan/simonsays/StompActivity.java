@@ -211,42 +211,32 @@ public class StompActivity extends AppCompatActivity {
 
 
     public void onClick(View v) {
-        if(v.getId() == R.id.button2) {
-            if (doneActivities.isEmpty()) {
-                Intent intent = new Intent(this, FinalActivity.class);
-                intent.putExtra("time", seconds);
-                startActivity(intent);
-            } else {
-                decideNext(doneActivities.get(0));
-                handleIntent();
-            }
+        if (isBad(v)) {
+            stomped--;
+            score.setText(stomped + "/10");
+            this.v.vibrate(100);
+            v.setVisibility(View.INVISIBLE);
+            bgFadeIn.start();
+            bgFadeOut.start();
         } else {
-            if (isBad(v)) {
-                stomped--;
-                score.setText(stomped + "/10");
-                this.v.vibrate(100);
-                v.setVisibility(View.INVISIBLE);
-                bgFadeIn.start();
-                bgFadeOut.start();
-            } else {
-                stomped++;
-                score.setText(stomped + "/10");
-                this.v.vibrate(100);
-                v.setVisibility(View.INVISIBLE);
+            stomped++;
+            score.setText(stomped + "/10");
+            this.v.vibrate(100);
+            v.setVisibility(View.INVISIBLE);
 
-                if (stomped >= 10) {
-                    playing = false;
-                    if (doneActivities.isEmpty()) {
-                        Intent intent = new Intent(this, FinalActivity.class);
-                        intent.putExtra("time", seconds);
-                        startActivity(intent);
-                    } else {
-                        decideNext(doneActivities.get(0));
-                        handleIntent();
-                    }
+            if (stomped >= 10) {
+                playing = false;
+                if (doneActivities.isEmpty()) {
+                    Intent intent = new Intent(this, FinalActivity.class);
+                    intent.putExtra("time", seconds);
+                    startActivity(intent);
+                } else {
+                    decideNext(doneActivities.get(0));
+                    handleIntent();
                 }
             }
         }
+
     }
 
 }

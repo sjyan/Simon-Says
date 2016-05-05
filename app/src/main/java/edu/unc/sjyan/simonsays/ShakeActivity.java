@@ -146,21 +146,4 @@ public class ShakeActivity extends AppCompatActivity implements SensorEventListe
     public void onAccuracyChanged(Sensor sensor, int accuracy) {
 
     }
-
-    public void onClick(View v) {
-        switch(v.getId()) {
-            case R.id.button:
-                sm.unregisterListener(this);
-                if(doneActivities.isEmpty()) {
-                    Intent intent = new Intent(this, FinalActivity.class);
-                    intent.putExtra("time", seconds);
-                    startActivity(intent);
-                } else {
-                    decideNext(doneActivities.get(0));
-                    handleIntent();
-                }
-                break;
-        }
-    }
-
 }

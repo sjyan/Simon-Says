@@ -161,19 +161,4 @@ public class TypeGameActivity extends AppCompatActivity {
         }
         return charsCorrect > 0 ? charsCorrect / randomString.length() : 0;
     }
-
-    public void onClick(View v) {
-        switch(v.getId()) {
-            case R.id.button3:
-                if(doneActivities.isEmpty()) {
-                    Intent intent = new Intent(this, FinalActivity.class);
-                    intent.putExtra("time", seconds);
-                    startActivity(intent);
-                } else {
-                    decideNext(doneActivities.get(0));
-                    handleIntent();
-                }
-                break;
-        }
-    }
 }

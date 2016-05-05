@@ -23,7 +23,7 @@ public class StartActivity extends AppCompatActivity {
     public void onClick(View v) {
         switch(v.getId()) {
             case R.id.play:
-                Intent intent = new Intent(this, WaitingRoom.class);
+                Intent intent = new Intent(this, CountdownActivity.class);
                 startActivity(intent);
                 break;
             case R.id.help:
