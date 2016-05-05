@@ -39,14 +39,14 @@ public class TypeGameActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.type_game);
 
-        Log.v(this.getClass().toString(), "size: " + doneActivities + ", isEmpty; "
-                + doneActivities.isEmpty());
-
         doneActivities = getIntent().getIntegerArrayListExtra("done");
         seconds = getIntent().getExtras().getInt("time");
         time = (TextView) findViewById(R.id.time);
         t = new Timer();
         manageTime();
+
+        Log.v(this.getClass().toString(), "size: " + doneActivities + ", isEmpty; "
+                + doneActivities.isEmpty());
 
         TextView titleTextView = (TextView) findViewById(R.id.typeGameTitleText);
         EditText answerEditText = (EditText) findViewById(R.id.typeGameEditText);
@@ -93,10 +93,19 @@ public class TypeGameActivity extends AppCompatActivity {
 
     public void handleIntent() {
         Intent intent = new Intent(this, nextActivity);
-        Log.v("This activity is", this.getClass().toString());
-        Log.v("Next activity is", nextActivity.toString());
-        intent.putIntegerArrayListExtra("done", doneActivities);
+
+        // send timer and queued activities info
+        int seconds = 0;
+        Log.v("Head of activity stack", doneActivities.get(0).toString());
+        doneActivities.remove(0);
+        if(doneActivities.isEmpty()) {
+            Log.v("Next activity is", "Final Activity");
+        } else {
+            Log.v("Next activity is", doneActivities.get(0).toString());
+        }        intent.putIntegerArrayListExtra("done", doneActivities);
         intent.putExtra("time", seconds);
+        Log.v("This activity is", this.getClass().toString());
+        Log.v("Starting activity", nextActivity.toString());
         startActivity(intent);
     }
 
@@ -156,5 +165,20 @@ public class TypeGameActivity extends AppCompatActivity {
             }
         }
         return charsCorrect > 0 ? charsCorrect / randomString.length() : 0;
+    }
+
+    public void onClick(View v) {
+        switch(v.getId()) {
+            case R.id.button3:
+                if(doneActivities.isEmpty()) {
+                    Intent intent = new Intent(this, FinalActivity.class);
+                    intent.putExtra("time", seconds);
+                    startActivity(intent);
+                } else {
+                    decideNext(doneActivities.get(0));
+                    handleIntent();
+                }
+                break;
+        }
     }
 }

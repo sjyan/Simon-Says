@@ -39,6 +39,9 @@ public class TriviaActivity extends AppCompatActivity {
         t = new Timer();
         manageTime();
 
+        Log.v(this.getClass().toString(), "size: " + doneActivities + ", isEmpty; "
+                + doneActivities.isEmpty());
+
         TextView question = (TextView)findViewById(R.id.triviaQuestion);
         try1=true;
         //call method to set a random question on activity creation
@@ -82,11 +85,20 @@ public class TriviaActivity extends AppCompatActivity {
 
     public void handleIntent() {
         Intent intent = new Intent(this, nextActivity);
-        Log.v("This activity is", this.getClass().toString());
-        Log.v("Next activity is", nextActivity.toString());
+
+        // send timer and queued activities info
+        int seconds = 0;
+        Log.v("Head of activity stack", doneActivities.get(0).toString());
         doneActivities.remove(0);
+        if(doneActivities.isEmpty()) {
+            Log.v("Next activity is", "Final Activity");
+        } else {
+            Log.v("Next activity is", doneActivities.get(0).toString());
+        }
         intent.putIntegerArrayListExtra("done", doneActivities);
         intent.putExtra("time", seconds);
+        Log.v("This activity is", this.getClass().toString());
+        Log.v("Starting activity", nextActivity.toString());
         startActivity(intent);
     }
 

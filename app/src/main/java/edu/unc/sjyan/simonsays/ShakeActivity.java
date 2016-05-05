@@ -9,6 +9,7 @@ import android.hardware.SensorManager;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.View;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -43,6 +44,9 @@ public class ShakeActivity extends AppCompatActivity implements SensorEventListe
         time = (TextView) findViewById(R.id.time);
         t = new Timer();
         manageTime();
+
+        Log.v(this.getClass().toString(), "size: " + doneActivities + ", isEmpty; "
+                + doneActivities.isEmpty());
 
         sm = (SensorManager) getSystemService(Context.SENSOR_SERVICE);
         l = sm.getSensorList(Sensor.TYPE_ALL);
@@ -88,11 +92,19 @@ public class ShakeActivity extends AppCompatActivity implements SensorEventListe
 
     public void handleIntent() {
         Intent intent = new Intent(this, nextActivity);
-        Log.v("This activity is", this.getClass().toString());
-        Log.v("Next activity is", nextActivity.toString());
+
+        // send timer and queued activities info
+        int seconds = 0;
+        Log.v("Head of activity stack", doneActivities.get(0).toString());
         doneActivities.remove(0);
-        intent.putIntegerArrayListExtra("done", doneActivities);
+        if(doneActivities.isEmpty()) {
+            Log.v("Next activity is", "Final Activity");
+        } else {
+            Log.v("Next activity is", doneActivities.get(0).toString());
+        }        intent.putIntegerArrayListExtra("done", doneActivities);
         intent.putExtra("time", seconds);
+        Log.v("This activity is", this.getClass().toString());
+        Log.v("Starting activity", nextActivity.toString());
         startActivity(intent);
     }
 
@@ -133,6 +145,22 @@ public class ShakeActivity extends AppCompatActivity implements SensorEventListe
     @Override
     public void onAccuracyChanged(Sensor sensor, int accuracy) {
 
+    }
+
+    public void onClick(View v) {
+        switch(v.getId()) {
+            case R.id.button:
+                sm.unregisterListener(this);
+                if(doneActivities.isEmpty()) {
+                    Intent intent = new Intent(this, FinalActivity.class);
+                    intent.putExtra("time", seconds);
+                    startActivity(intent);
+                } else {
+                    decideNext(doneActivities.get(0));
+                    handleIntent();
+                }
+                break;
+        }
     }
 
 }

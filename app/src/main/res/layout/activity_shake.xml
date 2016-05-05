@@ -54,4 +54,14 @@
         android:layout_toRightOf="@+id/progressBar"
         android:layout_toEndOf="@+id/progressBar" />
 
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Next"
+        android:id="@+id/button"
+        android:onClick="onClick"
+        android:layout_below="@+id/progressBar"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="64dp" />
+
 </RelativeLayout>

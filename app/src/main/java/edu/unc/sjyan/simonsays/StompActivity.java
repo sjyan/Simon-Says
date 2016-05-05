@@ -61,6 +61,9 @@ public class StompActivity extends AppCompatActivity {
         t = new Timer();
         manageTime();
 
+        Log.v(this.getClass().toString(), "size: " + doneActivities + ", isEmpty; "
+                + doneActivities.isEmpty());
+
         l = (RelativeLayout) findViewById(R.id.stomp_layout);
         v = (Vibrator) getSystemService(Context.VIBRATOR_SERVICE);
         score = (TextView) findViewById(R.id.stomp_score);
@@ -110,11 +113,19 @@ public class StompActivity extends AppCompatActivity {
 
     public void handleIntent() {
         Intent intent = new Intent(this, nextActivity);
-        Log.v("This activity is", this.getClass().toString());
-        Log.v("Next activity is", nextActivity.toString());
+
+        // send timer and queued activities info
+        int seconds = 0;
+        Log.v("Head of activity stack", doneActivities.get(0).toString());
         doneActivities.remove(0);
-        intent.putIntegerArrayListExtra("done", doneActivities);
+        if(doneActivities.isEmpty()) {
+            Log.v("Next activity is", "Final Activity");
+        } else {
+            Log.v("Next activity is", doneActivities.get(0).toString());
+        }        intent.putIntegerArrayListExtra("done", doneActivities);
         intent.putExtra("time", seconds);
+        Log.v("This activity is", this.getClass().toString());
+        Log.v("Starting activity", nextActivity.toString());
         startActivity(intent);
     }
 
@@ -200,28 +211,39 @@ public class StompActivity extends AppCompatActivity {
 
 
     public void onClick(View v) {
-        if(isBad(v)) {
-            stomped--;
-            score.setText(stomped + "/10");
-            this.v.vibrate(100);
-            v.setVisibility(View.INVISIBLE);
-            bgFadeIn.start();
-            bgFadeOut.start();
+        if(v.getId() == R.id.button2) {
+            if (doneActivities.isEmpty()) {
+                Intent intent = new Intent(this, FinalActivity.class);
+                intent.putExtra("time", seconds);
+                startActivity(intent);
+            } else {
+                decideNext(doneActivities.get(0));
+                handleIntent();
+            }
         } else {
-            stomped++;
-            score.setText(stomped + "/10");
-            this.v.vibrate(100);
-            v.setVisibility(View.INVISIBLE);
+            if (isBad(v)) {
+                stomped--;
+                score.setText(stomped + "/10");
+                this.v.vibrate(100);
+                v.setVisibility(View.INVISIBLE);
+                bgFadeIn.start();
+                bgFadeOut.start();
+            } else {
+                stomped++;
+                score.setText(stomped + "/10");
+                this.v.vibrate(100);
+                v.setVisibility(View.INVISIBLE);
 
-            if(stomped >= 10) {
-                playing = false;
-                if(doneActivities.isEmpty()) {
-                    Intent intent = new Intent(this, FinalActivity.class);
-                    intent.putExtra("time", seconds);
-                    startActivity(intent);
-                } else {
-                    decideNext(doneActivities.get(0));
-                    handleIntent();
+                if (stomped >= 10) {
+                    playing = false;
+                    if (doneActivities.isEmpty()) {
+                        Intent intent = new Intent(this, FinalActivity.class);
+                        intent.putExtra("time", seconds);
+                        startActivity(intent);
+                    } else {
+                        decideNext(doneActivities.get(0));
+                        handleIntent();
+                    }
                 }
             }
         }

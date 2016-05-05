@@ -50,11 +50,13 @@ public class StartActivity extends AppCompatActivity {
 
         // send timer and queued activities info
         int seconds = 0;
-        Log.v("This activity is", this.getClass().toString());
-        Log.v("Next activity is", nextActivity.toString());
+        Log.v("Head of activity stack", doneActivities.get(0).toString());
         doneActivities.remove(0);
+        Log.v("Next activity in stack", doneActivities.get(0).toString());
         intent.putIntegerArrayListExtra("done", doneActivities);
         intent.putExtra("time", seconds);
+        Log.v("This activity is", this.getClass().toString());
+        Log.v("Starting activity", nextActivity.toString());
         startActivity(intent);
     }
 
