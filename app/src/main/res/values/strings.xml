@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">SimonSays</string>
+    <string name="app_name">Nirjon Says</string>
         <string name="question1">
         Who\'s going to be our next president?
     </string>
@@ -14,5 +14,8 @@
     </string>
     <string name="q1a4">
         Donald Trump.
+    </string>
+    <string name="facebook_app_id">
+        220665398313681
     </string>
 </resources>

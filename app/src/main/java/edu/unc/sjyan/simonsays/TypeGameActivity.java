@@ -38,6 +38,7 @@ public class TypeGameActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState){
         super.onCreate(savedInstanceState);
         setContentView(R.layout.type_game);
+        getSupportActionBar().hide();
 
         doneActivities = getIntent().getIntegerArrayListExtra("done");
         seconds = getIntent().getExtras().getInt("time");
@@ -48,12 +49,10 @@ public class TypeGameActivity extends AppCompatActivity {
         Log.v(this.getClass().toString(), "size: " + doneActivities + ", isEmpty; "
                 + doneActivities.isEmpty());
 
-        TextView titleTextView = (TextView) findViewById(R.id.typeGameTitleText);
         EditText answerEditText = (EditText) findViewById(R.id.typeGameEditText);
         TypeGameAnimation promptTextViewAnimation =
                 (TypeGameAnimation) findViewById(R.id.typeGamePromptTextAnimation);
 
-        YoYo.with(Techniques.Bounce).playOn(titleTextView);
         randomString = generateRandomString();
         promptTextViewAnimation.invalidate();
         answerEditText.addTextChangedListener(watcher);
@@ -95,7 +94,6 @@ public class TypeGameActivity extends AppCompatActivity {
         Intent intent = new Intent(this, nextActivity);
 
         // send timer and queued activities info
-        int seconds = 0;
         Log.v("Head of activity stack", doneActivities.get(0).toString());
         doneActivities.remove(0);
         if(doneActivities.isEmpty()) {
@@ -143,9 +141,6 @@ public class TypeGameActivity extends AppCompatActivity {
                     decideNext(doneActivities.get(0));
                     handleIntent();
                 }
-                new ParticleSystem(getThis(), 50, R.drawable.confetti , 1000)
-                        .setSpeedRange(0.2f, 0.5f)
-                        .oneShot(findViewById(R.id.typeGamePromptTextAnimation), 400);
             }
         }
 

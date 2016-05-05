@@ -54,6 +54,7 @@ public class StompActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_stomp);
+        getSupportActionBar().hide();
 
         doneActivities = getIntent().getIntegerArrayListExtra("done");
         seconds = getIntent().getExtras().getInt("time");
@@ -115,7 +116,6 @@ public class StompActivity extends AppCompatActivity {
         Intent intent = new Intent(this, nextActivity);
 
         // send timer and queued activities info
-        int seconds = 0;
         Log.v("Head of activity stack", doneActivities.get(0).toString());
         doneActivities.remove(0);
         if(doneActivities.isEmpty()) {

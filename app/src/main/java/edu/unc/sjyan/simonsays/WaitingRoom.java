@@ -5,7 +5,6 @@ import android.bluetooth.BluetoothDevice;
 import android.bluetooth.BluetoothServerSocket;
 import android.bluetooth.BluetoothSocket;
 import android.content.Intent;
-import android.net.Uri;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
@@ -13,6 +12,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.LinearLayout;
+import android.widget.Toast;
 
 import java.io.IOException;
 import java.util.HashMap;
@@ -34,6 +34,7 @@ public class WaitingRoom extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.waiting_room);
+        getSupportActionBar().hide();
 
         mBluetoothAdapter = BluetoothAdapter.getDefaultAdapter();
         if (mBluetoothAdapter == null) {
@@ -54,6 +55,7 @@ public class WaitingRoom extends AppCompatActivity {
     private void onConnectClient(BluetoothSocket bts) {
         acceptThread.cancel();
         this.bts = bts;
+
     }
 
     private void onConnectServer(BluetoothSocket bts) {
@@ -84,7 +86,21 @@ public class WaitingRoom extends AppCompatActivity {
                     connectThread = new ConnectThread(deviceNameToAddress.get(v.getTag()));
                 }
             });
+
             linearLayout.addView(bt);
+
+            // Begin with paired device
+            Toast.makeText(getApplicationContext(), "Found your opponent. Let's begin!",
+                    Toast.LENGTH_SHORT);
+
+            try {
+                Thread.sleep(2000);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+
+            Intent intent = new Intent(this, CountdownActivity.class);
+            startActivity(intent);
         }
     }
 
@@ -97,7 +113,7 @@ public class WaitingRoom extends AppCompatActivity {
             BluetoothServerSocket tmp = null;
             try {
                 // MY_UUID is the app's UUID string, also used by the client code
-                tmp = mBluetoothAdapter.listenUsingRfcommWithServiceRecord("SimonSays", MY_UUID);
+                tmp = mBluetoothAdapter.listenUsingRfcommWithServiceRecord("Nirjon Says", MY_UUID);
             } catch (IOException e) {
             }
             mmServerSocket = tmp;
